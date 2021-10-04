@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using QuirkyBookRental.ViewModel;
+using QuirkyBookRental.Extensions;
+using QuirkyBookRental.Models;
+
+namespace QuirkyBookRental.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index( string search = null)
+        {
+            var thumbnails = new List<ThumbnailModel>().GetBookThumbnail(ApplicationDbContext.Create(), search);
+            var count = thumbnails.Count() / 3;
+            var model = new List<ThumbnailBoxViewModel>();
+
+            for (int i = 0; i <= count; i++)
+            {
+                model.Add(new ThumbnailBoxViewModel
+                {
+                    Thumbnails = thumbnails.Skip(i*3).Take(3)
+                });
+                
+            }
+            return View(model);
+        }
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+    }
+}
